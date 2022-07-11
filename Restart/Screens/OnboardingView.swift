@@ -10,6 +10,8 @@ import SwiftUI
 struct OnboardingView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
     
+    @State private var isAnimating: Bool = false
+    
     var body: some View {
         VStack(spacing: 20) {
             // Header
@@ -21,7 +23,14 @@ struct OnboardingView: View {
                 
                 Image("character-2")
                     .resizable()
-                .scaledToFit()
+                    .scaledToFit()
+                    .offset(y: isAnimating ? 35 : -35)
+                    .animation(
+                        Animation
+                            .easeOut(duration: 4)
+                            .repeatForever(),
+                        value: isAnimating
+                    )
             }
             
             // Center
@@ -38,7 +47,9 @@ struct OnboardingView: View {
             Spacer()
             
             Button(action: {
-                isOnboardingViewActive = false
+                withAnimation {
+                    isOnboardingViewActive = false
+                }
             }) {
                 Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
                     .imageScale(.large)
@@ -51,6 +62,11 @@ struct OnboardingView: View {
             .buttonBorderShape(.capsule)
             .controlSize(.large)
         }
+        .onAppear(perform: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                isAnimating =  true
+            })
+        })
     }
 }
 
