@@ -155,6 +155,7 @@ struct HomeView: View {
                                         } else {
                                             buttonOffset = buttonWidth - 80
                                             isOnboardingViewActive = true
+                                            playSound(sound: "chimeup", type: "mp3")
                                         }
                                     }
                                 }
@@ -173,6 +174,7 @@ struct HomeView: View {
         .onAppear(perform: {
             isAnimating = true
         })
+        .preferredColorScheme(.dark)
     }
 }
 
